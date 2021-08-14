@@ -1,29 +1,32 @@
 ﻿using System;
 using System.IO;
 using Dungeosis;
+using System.Text.Json;
 
 namespace Dungeosis.ConsoleApp {
     class Program {
+        public const int DefaultMapWidth = 1000;
+        public const int DefaultMapHeight = 1000;
+
         public static void Main(string[] args) {
             Console.WriteLine("Starting Dungeosis.");
             Console.WriteLine("Args: " + (args.Length == 0 ? "none" : String.Join(", ", args)));
             
-            instantiateEnvironment();
+            InstantiateEnvironment();
 
             var seed = (int)DateTimeOffset.Now.ToUnixTimeMilliseconds();
             Console.WriteLine("Seed: " + seed);
 
-            var mapGenerator = new MapGenerator(seed);
-            var map = mapGenerator.generate();
+            var map = new MapGenerator(seed).Generate();
 
-            writeMapToFile(map);
+            WriteMapToFile(map);
         }
 
-        private static async void writeMapToFile(Map map) {
-            await File.WriteAllTextAsync("map.txt", map.getGridAsString());
+        private static void WriteMapToFile(Map map) {
+            File.WriteAllTextAsync("map.txt", map.GetGridAsString()).Wait();
         }
 
-        private static void instantiateEnvironment() {
+        private static void InstantiateEnvironment() {
             int mapWidth = 0;
             int mapHeight = 0;
 
@@ -44,13 +47,13 @@ namespace Dungeosis.ConsoleApp {
             }
 
             if (mapWidth < 10) {
-                Console.WriteLine("Defaulting MAP_WIDTH to 325."); 
-                Environment.SetEnvironmentVariable("MAP_WIDTH", "325");
+                Console.WriteLine("Defaulting MAP_WIDTH to 125."); 
+                Environment.SetEnvironmentVariable("MAP_WIDTH", Program.DefaultMapWidth.ToString());
             }
 
             if (mapHeight < 10) {
-                Console.WriteLine("Defaulting MAP_HIEGHT to 325.");
-                Environment.SetEnvironmentVariable("MAP_HEIGHT", "325");
+                Console.WriteLine("Defaulting MAP_HEIGHT to 75.");
+                Environment.SetEnvironmentVariable("MAP_HEIGHT",  Program.DefaultMapHeight.ToString());
             }
         }
     }

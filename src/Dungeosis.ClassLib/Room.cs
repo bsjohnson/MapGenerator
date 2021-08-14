@@ -4,33 +4,37 @@ using System.Windows;
 namespace Dungeosis {
     
     public class Room {
+                const int BorderThreshold = 2;
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
+
+        public int Region { get; set; }
+
         public Room(int x, int y, int width, int height) {
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
+            this.X = x;
+            this.Y = y;
+            this.Width = width;
+            this.Height = height;
         }
 
-        const int CellCode = 1;
-        public int x { set; get; }
-        public int y { set; get; }
-        public int width { set; get; }
-        public int height { set; get; }
-
-        public bool intersects(Room room) {
+        public bool Intersects(Room room, int threshold = Room.BorderThreshold) {
             if (room == null) return false;
             
-            var room_x1 = room.x + room.width;
-            var room_y1 = room.y + room.height;
+            var room_x1 = room.X + room.Width;
+            var room_y1 = room.Y + room.Height;
             
-            var this_x1 = this.x + this.width;
-            var this_y1 = this.y + this.width;
+            var this_x0 = this.X - threshold;
+            var this_y0 = this.Y - threshold;
+            var this_x1 = this.X + this.Width + threshold;
+            var this_y1 = this.Y + this.Height + threshold;
 
-            return this.x <= room_x1 && this_x1 >= room.x && this.y <= room_y1 && this_y1 >= room.y;
+            return this_x0 <= room_x1 && this_x1 >= room.X && this_y0 <= room_y1 && this_y1 >= room.Y;
         }
 
         public override string ToString() {
-            return $"Room:: x={this.x}, y={this.y}, width={this.width}, height={this.height}";
+            return $"Room:: x={this.X}, y={this.Y}, width={this.Width}, height={this.Height}";
         }
     }
 }
