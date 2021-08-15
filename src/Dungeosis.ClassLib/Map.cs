@@ -7,11 +7,14 @@ using System.Text;
 
 namespace Dungeosis {
     public class Map {
+
+        const int DefaultWidth = 75;
+        const int DefaultHeight = 75;
         public int Width { get; set; }
         public int Height { get; set; }
         public int[,] Grid { get; set; }
 
-        public Map() : this(GetDefaultWidth(), GetDefaultHeight()) {}
+        public Map() : this(DefaultWidth, DefaultHeight) {}
 
         public Map (int width, int height) {
             this.Width = width;
@@ -45,24 +48,6 @@ namespace Dungeosis {
             if (!Contains(x, y)) throw new ArgumentException($"x={x}, y={y} out of bounds for the map!");
 
             Grid[x, y] = region;
-        }
-
-        public static int GetDefaultHeight() {
-            try {
-                return Int32.Parse(Environment.GetEnvironmentVariable("MAP_HEIGHT"));
-            } catch (FormatException) {
-                Console.WriteLine("Unable to parse MAP_HEIGHT from ENV. Using default value.");
-                return 240;
-            }
-        }
-
-        public static int GetDefaultWidth() {
-           try {
-                return Int32.Parse(Environment.GetEnvironmentVariable("MAP_WIDTH"));
-            } catch (FormatException) {
-                Console.WriteLine("Unable to parse MAP_WIDTH from ENV. Using default value.");
-                return 320;
-            } 
         }
 
         public override string ToString() {
