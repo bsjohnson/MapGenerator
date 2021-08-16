@@ -34,7 +34,7 @@ namespace Dungeosis {
         }
 
         public override string ToString() {
-            return $"Room:: x={this.X}, y={this.Y}, width={this.Width}, height={this.Height}";
+            return $"Room(x={this.X}, y={this.Y}, width={this.Width}, height={this.Height})";
         }
     }
 }

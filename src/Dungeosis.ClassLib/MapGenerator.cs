@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Numerics;
@@ -180,15 +181,24 @@ namespace Dungeosis {
 
                     if (regions.Count > 1) return false;
 
-                    // Occasionally connect a random connector so the map/maze is imperfect.
-                    /* if (random.Next(10) <= 2) {
+                    if (random.Next(25) == 1 && !IsNextToRegion(map, coordinate, '=' - 64)) {
                         Console.WriteLine($"Adding random door at {coordinate}");
                         map.SetRegionAt('=' - 64, coordinate);
-                    } */
+                    }
 
                     return true;
                 });
             }
+        }
+
+        private static bool IsNextToRegion(Map map, Coordinate coordinate, int region) {
+            foreach (Vector2 direction in Direction.Cardinals) {
+                var toCheck = coordinate + direction;
+                if (map.Contains(toCheck) && map.GetRegionAt(toCheck) == region) {
+                    return true;
+                } 
+            }
+            return false;
         }
 
         private static Dictionary<Coordinate, List<int>> GetConnectedRegionDictionary(Map map) {

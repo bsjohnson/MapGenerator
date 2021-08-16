@@ -8,8 +8,8 @@ using System.Text;
 namespace Dungeosis {
     public class Map {
 
-        const int DefaultWidth = 75;
-        const int DefaultHeight = 75;
+        const int DefaultWidth = 1000;
+        const int DefaultHeight = 1000;
         public int Width { get; set; }
         public int Height { get; set; }
         public int[,] Grid { get; set; }
