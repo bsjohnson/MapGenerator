@@ -4,13 +4,12 @@ using System.Windows;
 namespace Dungeosis {
     
     public class Room {
-                const int BorderThreshold = 2;
         public int X { get; set; }
         public int Y { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
 
-        public int Region { get; set; }
+        public int Region { get; set; } // TODO: Remove this and put room/region tracking in MapGenerator
 
         public Room(int x, int y, int width, int height) {
             this.X = x;
@@ -19,7 +18,7 @@ namespace Dungeosis {
             this.Height = height;
         }
 
-        public bool Intersects(Room room, int threshold = Room.BorderThreshold) {
+        public bool Intersects(Room room, int threshold = 0) {
             if (room == null) return false;
             
             var room_x1 = room.X + room.Width;

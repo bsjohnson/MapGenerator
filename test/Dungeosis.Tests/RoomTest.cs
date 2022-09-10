@@ -70,30 +70,30 @@ namespace Dungeosis.Tests {
         }
 
         [Fact]
-        public void Intersects_HasADefaultThresholdOfTwo() {
+        public void Intersects_CanBeGivenABorderThreshold() {
             Room room1 = new(20, 20, 10, 10);
             Room room2 = new(9, 20, 10, 10);
             
-            Assert.True(room1.Intersects(room2), "Rooms west within 2 spaces should be considered overlapping");
-            Assert.False(room1.Intersects(room2, 0), "Rooms west should not have been considered overlapping with zero threshold.");
+            Assert.True(room1.Intersects(room2, 2), "Rooms west within 2 spaces should be considered overlapping");
+            Assert.False(room1.Intersects(room2), "Rooms west should not have been considered overlapping with zero threshold.");
 
             room1 = new(20, 20, 10, 10);
             room2 = new(20, 9, 10, 10);
 
-            Assert.True(room1.Intersects(room2), "Rooms north within 2 spaces should be considered overlapping");
-            Assert.False(room1.Intersects(room2, 0), "Rooms north should not have been considered overlapping with zero threshold.");
+            Assert.True(room1.Intersects(room2, 2), "Rooms north within 2 spaces should be considered overlapping");
+            Assert.False(room1.Intersects(room2), "Rooms north should not have been considered overlapping with zero threshold.");
 
             room1 = new(20, 20, 10, 10);
             room2 = new(31, 20, 10, 10);
 
-            Assert.True(room1.Intersects(room2), "Rooms eaast within 2 spaces should be considered overlapping");
-            Assert.False(room1.Intersects(room2, 0), "Rooms east should not have been considered overlapping with zero threshold.");
+            Assert.True(room1.Intersects(room2, 2), "Rooms eaast within 2 spaces should be considered overlapping");
+            Assert.False(room1.Intersects(room2), "Rooms east should not have been considered overlapping with zero threshold.");
 
             room1 = new(20, 20, 10, 10);
             room2 = new(20, 31, 10, 10);
 
-            Assert.True(room1.Intersects(room2), "Rooms south within 2 spaces should be considered overlapping");
-            Assert.False(room1.Intersects(room2, 0), "Rooms south should not have been considered overlapping with zero threshold.");
+            Assert.True(room1.Intersects(room2, 2), "Rooms south within 2 spaces should be considered overlapping");
+            Assert.False(room1.Intersects(room2), "Rooms south should not have been considered overlapping with zero threshold.");
         }
     }
 }

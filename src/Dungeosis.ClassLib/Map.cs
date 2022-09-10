@@ -7,19 +7,14 @@ using System.Text;
 
 namespace Dungeosis {
     public class Map {
-
-        const int DefaultWidth = 1000;
-        const int DefaultHeight = 1000;
         public int Width { get; set; }
         public int Height { get; set; }
         public int[,] Grid { get; set; }
 
-        public Map() : this(DefaultWidth, DefaultHeight) {}
-
         public Map (int width, int height) {
-            this.Width = width;
-            this.Height = height;
-            this.Grid = new int[width, height];
+            Width = width;
+            Height = height;
+            Grid = new int[width, height];
         }
 
         public bool Contains(Coordinate point) {
@@ -27,7 +22,7 @@ namespace Dungeosis {
         }
 
         public bool Contains(int x, int y) {
-             return x >= 0 && x < this.Width && y >= 0 && y < this.Height;
+             return x >= 0 && x < Width && y >= 0 && y < Height;
         }
 
         public int GetRegionAt(Coordinate coordinate) {
@@ -37,7 +32,7 @@ namespace Dungeosis {
         public int GetRegionAt(int x, int y) {
             if (!Contains(x, y)) throw new ArgumentException($"x={x}, y={y} out of bounds for the map!");
 
-            return this.Grid[x, y];
+            return Grid[x, y];
         }
 
         public void SetRegionAt(int region, Coordinate coordinate) {
@@ -51,7 +46,7 @@ namespace Dungeosis {
         }
 
         public override string ToString() {
-            return $"Map(width={this.Width}, height={this.Height})";
+            return $"Map(width={Width}, height={Height})";
         }
         
         public string GetGridAsString() {
@@ -60,7 +55,7 @@ namespace Dungeosis {
             for (int y = 0; y < Grid.GetLength(1); y++) {
                 for (int x = 0; x < Grid.GetLength(0); x++) {
                     if (Grid[x,y] != 0) {
-                        output.Append((char)(this.GetRegionAt(x, y) + 64));
+                        output.Append((char)(GetRegionAt(x, y) + 64));
                     } else {
                         output.Append(' ');
                     }

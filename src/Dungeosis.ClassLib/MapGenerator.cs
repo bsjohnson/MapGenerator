@@ -1,47 +1,42 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net.NetworkInformation;
 using System.Numerics;
-using System.Xml.Schema;
 
-namespace Dungeosis {
+namespace Dungeosis
+{
     public class MapGenerator {
-        const int MaxRoomPlacementAttempts = 500;
+        public MapGeneratorConfig Config { get; set; }
         public List<Room> Rooms { get; set; }
         private readonly RoomGenerator roomGenerator;
         private readonly Random random;
         private List<int> regions;
         private int currentRegion;
 
-        public MapGenerator() : this((int)DateTimeOffset.Now.ToUnixTimeMilliseconds()) {}
 
-        public MapGenerator(int seed) {
-            this.random = new Random(seed);
-            this.roomGenerator = new RoomGenerator(seed);
+        public MapGenerator() : this(new MapGeneratorConfig()) {}
+
+        public MapGenerator(MapGeneratorConfig config) {
+            this.random = new Random(config.Seed);
+            this.roomGenerator = new RoomGenerator(config.Seed);
+            this.Config = config;
         }
 
         public Map Generate() {
             Console.WriteLine("Generating new Map...");
-            var map = new Map();
+            Map map = new Map(this.Config.Width, this.Config.Height);
 
             this.currentRegion = 0;
             this.Rooms = new List<Room>();
             this.regions = new List<int>();
             
-            Console.WriteLine("Generating Rooms...");
             GenerateRooms(map.Width, map.Height);
-            Console.WriteLine("  Room generated: " + this.Rooms.Count);
-            Console.WriteLine("Carving Rooms into Map...");
             CarveRooms(map);
-            Console.WriteLine("Carving maze into Map...");
-            CarveMaze(map);
-            Console.WriteLine("Connecting Map regions...");
-            Console.WriteLine("  Total regions to connect: " + this.currentRegion);
+            CarveMaze(map);            
             ConnectRegions(map);
-            Console.WriteLine("Removing dead ends from Maze...");
-            RemoveDeadEnds(map);
+
+            if (Config.CullDeadEnds) RemoveDeadEnds(map);
+
             Console.WriteLine("Done.");
 
             return map;
@@ -53,11 +48,13 @@ namespace Dungeosis {
         }
 
         private void GenerateRooms(int maxXBound, int maxYBound) {
-            var roomAttempts = MaxRoomPlacementAttempts;
-            var discaredRooms = new List<Room>();
+            Console.WriteLine("Generating Rooms...");
+
+            int roomAttempts = Config.RoomCollisionThreshold;
+            List<Room> discaredRooms = new List<Room>();
 
             while (roomAttempts > 0) {
-                var newRoom = this.roomGenerator.Generate(maxXBound, maxYBound);
+                Room newRoom = this.roomGenerator.Generate(maxXBound, maxYBound);
                 if (this.Rooms.Find(room => room.Intersects(newRoom)) != null) {
                     roomAttempts--;
                     continue;
@@ -75,6 +72,7 @@ namespace Dungeosis {
         }
 
         private void CarveRooms(Map map) {
+            Console.WriteLine("Carving Rooms into Map...");
             //TODO: Investigate a better way to do this.
             foreach (Room room in this.Rooms) {
                 for (var x = room.X; x < room.X + room.Width; x++) {
@@ -99,7 +97,7 @@ namespace Dungeosis {
         private void GrowMaze(Map map, Coordinate start) {
             var cells = new List<Coordinate>();
             
-            Vector2 lastDirection = Vector2.Zero;
+            Vector2 lastDirection = Vector2.Zero; // Use Zero vector to force direction pick since Vectors aren't nullable.
 
             CreateNewRegion();
 
@@ -111,6 +109,7 @@ namespace Dungeosis {
                 var currentCell = cells.Last();
                 var uncarvedCellDirections = new List<Vector2>();
 
+                // Get cells around us that are not already carved out.
                 foreach (var direction in Direction.Cardinals) {
                     if (CanCarve(map, currentCell, direction)) {
                         uncarvedCellDirections.Add(direction);
@@ -120,10 +119,13 @@ namespace Dungeosis {
                 if (uncarvedCellDirections.Count > 0) {
                     Vector2 direction;
 
-                    if (uncarvedCellDirections.Contains(lastDirection) && random.Next(100) >= 60) { // TODO: Make this configurable.
-                        direction = lastDirection;
-                    } else {
+                    bool cannotContinue = !uncarvedCellDirections.Contains(lastDirection);
+                    bool shouldRandomlyTurn = random.Next(100) <= Config.CorridorDirectionChangeChance;
+
+                    if (cannotContinue || shouldRandomlyTurn) {
                         direction = uncarvedCellDirections[random.Next(uncarvedCellDirections.Count)];
+                    } else {
+                        direction = lastDirection;
                     }
 
                     map.SetRegionAt(this.currentRegion, currentCell + direction);
@@ -140,6 +142,9 @@ namespace Dungeosis {
         }
 
         private void ConnectRegions(Map map) {
+            Console.WriteLine("Connecting Map regions...");
+            Console.WriteLine($"  Total regions to connect: {this.currentRegion}");
+
             // Get all cells that could be connection points.
             var connectorRegions = GetConnectedRegionDictionary(map);
 
@@ -153,7 +158,6 @@ namespace Dungeosis {
             }
 
             while (openRegions.Count > 1) {
-                Console.WriteLine("  Open regions left to connect: " + openRegions.Count);
                 if (connectors.Count == 0) {
                     Console.WriteLine("** Available connectors empty, but unmerged regions remain.");
                     Console.WriteLine($"** {String.Join(", ", openRegions)}");
@@ -182,7 +186,6 @@ namespace Dungeosis {
                     if (regions.Count > 1) return false;
 
                     if (random.Next(25) == 1 && !IsNextToRegion(map, coordinate, '=' - 64)) {
-                        Console.WriteLine($"Adding random door at {coordinate}");
                         map.SetRegionAt('=' - 64, coordinate);
                     }
 
@@ -241,6 +244,8 @@ namespace Dungeosis {
         }
 
         public static void RemoveDeadEnds(Map map) {
+            Console.WriteLine("Removing dead ends from Maze...");
+
             var done = false;
 
             while (!done) {
@@ -248,7 +253,7 @@ namespace Dungeosis {
 
                 for (int y = 0; y < map.Grid.GetLength(1); y++) {
                     for (int x = 0; x < map.Grid.GetLength(0); x++) {
-                        Coordinate cell = new(x, y);
+                        Coordinate cell = new Coordinate(x, y);
 
                         if (map.GetRegionAt(cell) == 0) continue;
 
