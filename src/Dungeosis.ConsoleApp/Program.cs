@@ -1,12 +1,15 @@
 ﻿using System;
 using System.IO;
 
-namespace Dungeosis.ConsoleApp {
-    class Program {
+namespace Dungeosis.ConsoleApp
+{
+    class Program
+    {
         public const int DefaultMapWidth = 1000;
         public const int DefaultMapHeight = 1000;
 
-        public static void Main(string[] args) {
+        public static void Main(string[] args)
+        {
             Console.WriteLine("Starting Dungeosis.");
             Console.WriteLine("Args: " + (args.Length == 0 ? "none" : String.Join(", ", args)));
 
@@ -18,7 +21,8 @@ namespace Dungeosis.ConsoleApp {
             WriteMapToFile(map);
         }
 
-        private static void WriteMapToFile(Map map) {
+        private static void WriteMapToFile(Map map)
+        {
             File.WriteAllTextAsync("map.txt", map.GetGridAsString()).Wait();
         }
     }

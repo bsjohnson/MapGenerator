@@ -1,19 +1,21 @@
-using System;
 using Xunit;
-using Dungeosis;
 
-namespace Dungeosis.Tests {
-    public class CoordinateTest {
+namespace Dungeosis.Tests
+{
+    public class CoordinateTest
+    {
         [Fact]
-        public void Coordinate_shouldHaveXAndYCoordinates() {
+        public void Coordinate_shouldHaveXAndYCoordinates()
+        {
             Coordinate coordinate = new(10, 20);
-            
+
             Assert.Equal(10, coordinate.X);
             Assert.Equal(20, coordinate.Y);
         }
 
-        [Fact]            
-        public void Coordinate_canBeAddedToDirectionVector() {
+        [Fact]
+        public void Coordinate_canBeAddedToDirectionVector()
+        {
             Coordinate coordinate = new(10, 20);
 
             Coordinate newCoordinate = coordinate + Direction.North;
@@ -38,7 +40,8 @@ namespace Dungeosis.Tests {
         }
 
         [Fact]
-        public void IsNextTo_ReturnsTrueIfCoordinatesAreNextToEachOther() {
+        public void IsNextTo_ReturnsTrueIfCoordinatesAreNextToEachOther()
+        {
             Coordinate origin = new(1, 1);
             Coordinate north = new(1, 0);
             Coordinate south = new(1, 2);
@@ -50,9 +53,10 @@ namespace Dungeosis.Tests {
             Assert.True(origin.IsNextTo(east));
             Assert.True(origin.IsNextTo(west));
         }
-        
+
         [Fact]
-        public void IsNextTo_ReturnsFalseIfCoordinatesAreMoreThanOneSpaceApart() {
+        public void IsNextTo_ReturnsFalseIfCoordinatesAreMoreThanOneSpaceApart()
+        {
             Coordinate origin = new(2, 2);
             Coordinate north = new(2, 0);
             Coordinate south = new(2, 4);

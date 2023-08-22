@@ -1,17 +1,19 @@
-using System;
 using Xunit;
-using Dungeosis;
 
-namespace Dungeosis.Tests {
-    public class RoomGeneratorTest {
+namespace Dungeosis.Tests
+{
+    public class RoomGeneratorTest
+    {
         const int maxXBound = 200;
         const int maxYBound = 100;
-        
+
         [Fact]
-        public void Generate_DoesNotGenerateRoomsOutsideTheGivenBounds() {
+        public void Generate_DoesNotGenerateRoomsOutsideTheGivenBounds()
+        {
             RoomGenerator generator = new();
 
-            for (int i = 0; i < 250; i++) {
+            for (int i = 0; i < 250; i++)
+            {
                 // rooms are randomly generated, so test a bunch and print the room details with any failure.
                 Room room = generator.Generate(maxXBound, maxYBound);
 
@@ -33,12 +35,14 @@ namespace Dungeosis.Tests {
         }
 
         [Fact]
-        public void Generate_GeneratesRoomsOnOddCoordinates() {
+        public void Generate_GeneratesRoomsOnOddCoordinates()
+        {
             RoomGenerator generator = new();
             int maxXBound = 200;
             int maxYBound = 100;
 
-            for (int i = 0; i < 250; i++) {
+            for (int i = 0; i < 250; i++)
+            {
                 Room room = generator.Generate(maxXBound, maxYBound);
 
                 Assert.True(room.X % 2 == 1, "X coordinate should have been odd.");
@@ -47,12 +51,14 @@ namespace Dungeosis.Tests {
         }
 
         [Fact]
-        public void Generate_GeneratesRoomsWithOddDimensions() {
+        public void Generate_GeneratesRoomsWithOddDimensions()
+        {
             RoomGenerator generator = new();
             int maxXBound = 200;
             int maxYBound = 100;
 
-            for (int i = 0; i < 250; i++) {
+            for (int i = 0; i < 250; i++)
+            {
                 Room room = generator.Generate(maxXBound, maxYBound);
 
                 Assert.True(room.Width % 2 == 1, "room width should have been odd.");

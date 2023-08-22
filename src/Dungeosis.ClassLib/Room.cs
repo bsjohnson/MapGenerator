@@ -1,9 +1,8 @@
-using System;
-using System.Windows;
+namespace Dungeosis
+{
 
-namespace Dungeosis {
-    
-    public class Room {
+    public class Room
+    {
         public int X { get; set; }
         public int Y { get; set; }
         public int Width { get; set; }
@@ -11,19 +10,21 @@ namespace Dungeosis {
 
         public int Region { get; set; } // TODO: Remove this and put room/region tracking in MapGenerator
 
-        public Room(int x, int y, int width, int height) {
+        public Room(int x, int y, int width, int height)
+        {
             this.X = x;
             this.Y = y;
             this.Width = width;
             this.Height = height;
         }
 
-        public bool Intersects(Room room, int threshold = 0) {
+        public bool Intersects(Room room, int threshold = 0)
+        {
             if (room == null) return false;
-            
+
             var room_x1 = room.X + room.Width;
             var room_y1 = room.Y + room.Height;
-            
+
             var this_x0 = this.X - threshold;
             var this_y0 = this.Y - threshold;
             var this_x1 = this.X + this.Width + threshold;
@@ -32,7 +33,8 @@ namespace Dungeosis {
             return this_x0 <= room_x1 && this_x1 >= room.X && this_y0 <= room_y1 && this_y1 >= room.Y;
         }
 
-        public override string ToString() {
+        public override string ToString()
+        {
             return $"Room(x={this.X}, y={this.Y}, width={this.Width}, height={this.Height})";
         }
     }

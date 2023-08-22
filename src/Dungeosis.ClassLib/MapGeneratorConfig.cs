@@ -1,11 +1,13 @@
 using System;
 
-namespace Dungeosis {
+namespace Dungeosis
+{
     ///<summary>Configuration settings to be used by the <c>MapGenerator</c> when generating maps.<summary>
-    public class MapGeneratorConfig {
+    public class MapGeneratorConfig
+    {
         public int Height { get; set; }
         public int Width { get; set; }
-        
+
         /// <summary>Indicates if dead ends in the corridor mazes should be removed.</summary>
         /// <remarks>
         /// By default, dead ends in the corridors connecting rooms are removed to make the paths between
@@ -14,7 +16,7 @@ namespace Dungeosis {
         /// </remarks>
 
         public bool CullDeadEnds { get; set; }
-        
+
         /// <summary>
         /// The max number of collisions with other rooms that shouild occur before stopping room generation.
         /// <summary>
@@ -24,7 +26,7 @@ namespace Dungeosis {
         /// trying to place rooms.  This numebr is that threshold.
         /// </remarks>
         public int RoomCollisionThreshold { get; set; }
-        
+
         /// <summary>
         /// Determines how much extra space/tiles should be between generated rooms and the edges of the map.
         /// </summary>
@@ -57,7 +59,8 @@ namespace Dungeosis {
         /// </summary>
         public int Seed { get; set; }
 
-        public MapGeneratorConfig() {
+        public MapGeneratorConfig()
+        {
             Width = 125;
             Height = 75;
             CullDeadEnds = true;

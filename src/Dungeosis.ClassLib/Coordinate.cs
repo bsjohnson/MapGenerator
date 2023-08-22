@@ -1,17 +1,21 @@
 using System;
 using System.Numerics;
 
-namespace Dungeosis {
-    public class Coordinate {
+namespace Dungeosis
+{
+    public class Coordinate
+    {
         public int X { get; set; }
         public int Y { get; set; }
 
-        public Coordinate(int X, int Y) {
+        public Coordinate(int X, int Y)
+        {
             this.X = X;
             this.Y = Y;
         }
 
-        public bool IsNextTo(Coordinate coordinate) {
+        public bool IsNextTo(Coordinate coordinate)
+        {
             if (this == coordinate) return true;
             if (this.X == coordinate.X && Math.Abs(this.Y - coordinate.Y) < 2) return true;
             if (this.Y == coordinate.Y && Math.Abs(this.X - coordinate.X) < 2) return true;
@@ -19,8 +23,10 @@ namespace Dungeosis {
             return false;
         }
 
-        public override bool Equals(object obj) {
-            if (obj == null || !this.GetType().Equals(obj.GetType())) {
+        public override bool Equals(object obj)
+        {
+            if (obj == null || !this.GetType().Equals(obj.GetType()))
+            {
                 return false;
             }
 
@@ -29,19 +35,23 @@ namespace Dungeosis {
             return this.X == coordinate.X && this.Y == coordinate.Y;
         }
 
-        public static bool operator ==(Coordinate x, Coordinate y) {
+        public static bool operator ==(Coordinate x, Coordinate y)
+        {
             return x.Equals(y);
         }
 
-        public static bool operator !=(Coordinate x, Coordinate y) {
+        public static bool operator !=(Coordinate x, Coordinate y)
+        {
             return !(x == y);
         }
 
-        public override int GetHashCode() {
+        public override int GetHashCode()
+        {
             return (this.X << 2) ^ this.Y;
         }
 
-        public static Coordinate operator +(Coordinate coordinate, Vector2 vector) {
+        public static Coordinate operator +(Coordinate coordinate, Vector2 vector)
+        {
             return new Coordinate(coordinate.X + (int)vector.X, coordinate.Y + (int)vector.Y);
         }
 
