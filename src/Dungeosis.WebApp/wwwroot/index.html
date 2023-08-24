@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Maze Generation Demo</title>
+        <script src="js/maps.js" onerror="alert('error!')"></script>
+        <style>
+            body {
+                padding: 0.25em 1em;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Maze Generation Demo</h1>
+        <hr />
+        <div>
+            <button onclick="fetchAndRenderNewMap()">Generate</button>
+        </div>
+        <hr />
+        <canvas id="map-canvas" width="100" height="100"></canvas>
+    </body>
+</html>
