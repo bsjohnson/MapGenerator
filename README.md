@@ -1,4 +1,4 @@
-# Dungeosis
+# MapGenerator
 A maze generator for C#.  The primary algorithm for generating this maze was adapted from this fantastic tutorial by Bob Nystrom, which can be found [here](https://journal.stuffwithstuff.com/2014/12/21/rooms-and-mazes/).
 
 ## Why C#?
