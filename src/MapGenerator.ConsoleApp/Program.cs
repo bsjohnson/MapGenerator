@@ -10,7 +10,7 @@ namespace Dungeosis.ConsoleApp
 
         public static void Main(string[] args)
         {
-            Console.WriteLine("Starting Dungeosis.");
+            Console.WriteLine("Starting MapGenerator.");
             Console.WriteLine("Args: " + (args.Length == 0 ? "none" : String.Join(", ", args)));
 
             MapGeneratorConfig config = new();
