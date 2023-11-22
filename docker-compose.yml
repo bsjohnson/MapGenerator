@@ -2,7 +2,9 @@ version: '3.4'
 
 services:
   mapgenerator.webapp:
-    image: ${DOCKER_REGISTRY-}mapgeneratorwebapp
+    image: ${DOCKER_REGISTRY-}map-generator
+    environment:
+      - APPDATA=${APPDATA:-~/.mapgenerator}
     build:
       context: .
       dockerfile: src/MapGenerator.WebApp/Dockerfile

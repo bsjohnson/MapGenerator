@@ -213,3 +213,7 @@ project.lock.json
 
 # Output from application
 map.txt
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
